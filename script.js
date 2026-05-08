@@ -1,5 +1,6 @@
 /* ============================
    Portfolio + Admin Panel
+   Автор: Alouzee
    Хранение: localStorage
    ============================ */
 
@@ -22,8 +23,8 @@ const defaultSocials = [
   { name: "GitHub",   url: "https://github.com",   icon: "github" },
   { name: "Twitter",  url: "https://twitter.com",  icon: "twitter" },
   { name: "Telegram", url: "https://t.me",         icon: "telegram" },
-  { name: "Email",    url: "mailto:hi@example.com",icon: "email" },
-  { name: "LinkedIn", url: "https://linkedin.com", icon: "linkedin" },
+  { name: "Email",    url: "mailto:hi@example.com", icon: "email" },
+  { name: "LinkedIn", url: "https://linkedin.com",  icon: "linkedin" },
 ];
 
 /* ---------- SVG-иконки ---------- */
@@ -43,6 +44,124 @@ const Store = {
   getSocials(){ return JSON.parse(localStorage.getItem(LS_SOCIALS)) || defaultSocials; },
   setSocials(s){ localStorage.setItem(LS_SOCIALS, JSON.stringify(s)); },
 };
+
+/* ---------- Typing Animation ---------- */
+class Typewriter {
+  constructor(element, texts, options = {}) {
+    this.el = element;
+    this.texts = texts;
+    this.speed = options.speed || 60;
+    this.deleteSpeed = options.deleteSpeed || 35;
+    this.pauseBetween = options.pauseBetween || 2000;
+    this.loop = options.loop !== undefined ? options.loop : true;
+    this.useHTML = options.useHTML || false;
+    this.onComplete = options.onComplete || null;
+    this.currentText = 0;
+    this.cursor = document.createElement("span");
+    this.cursor.className = "typing-cursor";
+    this.el.appendChild(this.cursor);
+    this.start();
+  }
+
+  async start() {
+    for (let i = 0; i < this.texts.length; i++) {
+      this.currentText = i;
+      await this.type(this.texts[i]);
+      if (i < this.texts.length - 1 || this.loop) {
+        await this.wait(this.pauseBetween);
+        await this.erase();
+        await this.wait(400);
+      }
+    }
+    if (!this.loop && this.onComplete) {
+      this.onComplete();
+    }
+  }
+
+  type(text) {
+    return new Promise(resolve => {
+      let idx = 0;
+      const interval = setInterval(() => {
+        if (this.useHTML) {
+          this.setContent(text.substring(0, idx + 1));
+        } else {
+          this.setContent(text.substring(0, idx + 1));
+        }
+        idx++;
+        if (idx >= text.length) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, this.speed);
+    });
+  }
+
+  erase() {
+    return new Promise(resolve => {
+      const text = this.texts[this.currentText];
+      let idx = text.length;
+      const interval = setInterval(() => {
+        idx--;
+        this.setContent(text.substring(0, idx));
+        if (idx <= 0) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, this.deleteSpeed);
+    });
+  }
+
+  setContent(content) {
+    if (this.useHTML) {
+      // Убираем курсор, ставим контент, вставляем курсор обратно
+      if (this.cursor.parentNode === this.el) this.el.removeChild(this.cursor);
+      this.el.innerHTML = content;
+      this.el.appendChild(this.cursor);
+    } else {
+      if (this.cursor.parentNode === this.el) this.el.removeChild(this.cursor);
+      this.el.textContent = content;
+      this.el.appendChild(this.cursor);
+    }
+  }
+
+  wait(ms) {
+    return new Promise(r => setTimeout(r, ms));
+  }
+}
+
+/* ---------- Запуск анимации печатания ---------- */
+function initTyping() {
+  const heading = document.getElementById("typingHeading");
+  const lead = document.getElementById("typingLead");
+
+  // Заголовок: несколько вариантов с циклом
+  const headingTexts = [
+    'Привет, я <span class="grad">Alouzee</span> —\nсоздаю современные сайты.',
+    'Привет, я <span class="grad">Alouzee</span> —\nфронтенд-разработчик.',
+    'Привет, я <span class="grad">Alouzee</span> —\nделаю интернет красивее.',
+  ];
+
+  // Подзаголовок: печатается один раз
+  const leadTexts = [
+    'Frontend-разработчик. Делаю чистые, быстрые и красивые веб-проекты с фокусом на пользовательский опыт.'
+  ];
+
+  new Typewriter(heading, headingTexts, {
+    speed: 55,
+    deleteSpeed: 30,
+    pauseBetween: 3000,
+    loop: true,
+    useHTML: true,
+  });
+
+  new Typewriter(lead, leadTexts, {
+    speed: 25,
+    deleteSpeed: 20,
+    pauseBetween: 5000,
+    loop: false,
+    useHTML: false,
+  });
+}
 
 /* ---------- Цветовые градиенты для плашек ---------- */
 const palettes = [
@@ -110,7 +229,6 @@ document.querySelectorAll(".modal").forEach(m=>{
 });
 
 /* ---------- Открытие админки ---------- */
-// Триггеры: 1) клик по невидимой плашке в углу 2) шорткат Ctrl+Shift+A
 document.getElementById("adminTrigger").addEventListener("click", showLoginOrAdmin);
 document.addEventListener("keydown", e=>{
   if(e.ctrlKey && e.shiftKey && e.key.toLowerCase()==="a"){ e.preventDefault(); showLoginOrAdmin(); }
@@ -219,7 +337,6 @@ function renderAdminSocials(){
       <button class="icon-btn danger" data-action="delsoc" data-i="${i}">×</button>
     </li>
   `).join("");
-  // стиль для select
   adminSoc.querySelectorAll(".icon-select").forEach(sel=>{
     Object.assign(sel.style,{padding:"8px 12px",borderRadius:"8px",background:"var(--bg)",color:"var(--text)",border:"1px solid var(--border)",fontFamily:"inherit",fontSize:"13px"});
   });
@@ -251,4 +368,5 @@ document.getElementById("saveSocialsBtn").addEventListener("click",()=>{
 /* ---------- Init ---------- */
 renderProjects();
 renderSocials();
+initTyping();
 document.getElementById("year").textContent = new Date().getFullYear();
