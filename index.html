@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Portfolio — Trent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Невидимая кнопка для админки (правый нижний угол) -->
+<div id="adminTrigger" title=""></div>
+
+<!-- Навигация -->
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="logo">◆ Trent</a>
+    <nav class="nav-links">
+      <a href="#hero">Главная</a>
+      <a href="#projects">Проекты</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<section id="hero" class="hero">
+  <div class="container hero-inner">
+    <span class="badge">● Доступен для работы</span>
+    <h1>Привет, я <span class="grad">Trent</span> —<br/>создаю современные сайты.</h1>
+    <p class="lead">Frontend-разработчик. Делаю чистые, быстрые и красивые веб-проекты с фокусом на пользовательский опыт.</p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn btn-primary">Посмотреть работы</a>
+      <a href="#contact" class="btn btn-ghost">Связаться</a>
+    </div>
+    <div class="socials" id="heroSocials"></div>
+  </div>
+</section>
+
+<!-- Projects -->
+<section id="projects" class="projects">
+  <div class="container">
+    <div class="section-head">
+      <h2>Избранные проекты</h2>
+      <p>Подборка сайтов, которые я сделал.</p>
+    </div>
+    <div class="projects-grid" id="projectsGrid"></div>
+  </div>
+</section>
+
+<!-- Footer / Contact -->
+<footer id="contact" class="footer">
+  <div class="container footer-inner">
+    <div>
+      <h3>Свяжемся?</h3>
+      <p class="muted">Открыт для интересных проектов и коллабораций.</p>
+    </div>
+    <div class="socials" id="footerSocials"></div>
+  </div>
+  <div class="container copyright">© <span id="year"></span> Trent. All rights reserved.</div>
+</footer>
+
+<!-- ===== Модалка авторизации ===== -->
+<div class="modal" id="loginModal">
+  <div class="modal-card">
+    <button class="modal-close" data-close>×</button>
+    <h3>Вход в админ-панель</h3>
+    <p class="muted">Введите пароль для доступа.</p>
+    <input type="password" id="passwordInput" placeholder="Пароль" />
+    <button class="btn btn-primary full" id="loginBtn">Войти</button>
+    <p class="error" id="loginError"></p>
+  </div>
+</div>
+
+<!-- ===== Админ-панель ===== -->
+<div class="modal" id="adminModal">
+  <div class="modal-card admin-card">
+    <button class="modal-close" data-close>×</button>
+    <div class="admin-head">
+      <h3>Админ-панель</h3>
+      <button class="btn btn-ghost small" id="logoutBtn">Выйти</button>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="projects">Проекты</button>
+      <button class="tab" data-tab="socials">Соцсети</button>
+    </div>
+
+    <!-- Tab Projects -->
+    <div class="tab-content active" data-content="projects">
+      <div class="form-row">
+        <input type="text" id="projTitle" placeholder="Название сайта (напр. EKI Studio)" />
+        <input type="url" id="projUrl" placeholder="https://example.com" />
+        <button class="btn btn-primary" id="addProjectBtn">Добавить</button>
+      </div>
+      <ul class="admin-list" id="adminProjectsList"></ul>
+    </div>
+
+    <!-- Tab Socials -->
+    <div class="tab-content" data-content="socials">
+      <ul class="admin-list" id="adminSocialsList"></ul>
+      <button class="btn btn-ghost full" id="saveSocialsBtn">Сохранить изменения</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
