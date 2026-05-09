@@ -26,7 +26,7 @@
 
 <section id="hero" class="hero">
   <div class="container hero-inner">
-    <span class="badge">● Доступен для работы</span>
+    <span class="badge" id="statusBadge"></span>
     <h1 id="typingHeading"></h1>
     <p class="lead" id="typingLead"></p>
     <div class="hero-actions">
@@ -58,7 +58,6 @@
   <div class="container copyright">© <span id="year"></span> Alouzee. All rights reserved.</div>
 </footer>
 
-<!-- Модалка авторизации -->
 <div class="modal" id="loginModal">
   <div class="modal-card">
     <button class="modal-close" data-close>×</button>
@@ -70,7 +69,6 @@
   </div>
 </div>
 
-<!-- Админ-панель -->
 <div class="modal" id="adminModal">
   <div class="modal-card admin-card">
     <button class="modal-close" data-close>×</button>
@@ -82,11 +80,12 @@
     <div class="tabs">
       <button class="tab active" data-tab="projects">Проекты</button>
       <button class="tab" data-tab="socials">Соцсети</button>
+      <button class="tab" data-tab="status">Статус</button>
     </div>
 
     <div class="tab-content active" data-content="projects">
       <div class="form-row">
-        <input type="text" id="projTitle" placeholder="Название сайта (напр. EKI Studio)" />
+        <input type="text" id="projTitle" placeholder="Название сайта" />
         <input type="url" id="projUrl" placeholder="https://example.com" />
         <button class="btn btn-primary" id="addProjectBtn">Добавить</button>
       </div>
@@ -96,6 +95,11 @@
     <div class="tab-content" data-content="socials">
       <ul class="admin-list" id="adminSocialsList"></ul>
       <button class="btn btn-ghost full" id="saveSocialsBtn">Сохранить изменения</button>
+    </div>
+
+    <div class="tab-content" data-content="status">
+      <p class="muted" style="margin-bottom:16px">Выберите текущий статус, который отображается на главной.</p>
+      <div class="status-options" id="statusOptions"></div>
     </div>
   </div>
 </div>
